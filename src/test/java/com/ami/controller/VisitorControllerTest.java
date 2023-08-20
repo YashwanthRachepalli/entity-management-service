@@ -1,0 +1,64 @@
+package com.ami.controller;
+
+import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.anyInt;
+
+import com.ami.dataprovider.VisitorDataProvider;
+import com.ams.controller.VisitorController;
+import com.ams.model.VisitorDto;
+import com.ams.service.VisitorService;
+import com.google.common.truth.Truth;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.ResponseEntity;
+
+import java.util.List;import java.util.UUID;
+
+@ExtendWith(MockitoExtension.class)
+public class VisitorControllerTest {
+
+    @Mock
+    private VisitorService visitorService;
+
+    @InjectMocks
+    private VisitorController visitorController;
+
+    @Test
+    public void testGetAllVisitors() {
+        when(visitorService.getAllVistors(anyInt(), anyInt()))
+                .thenReturn(List.of(VisitorDataProvider.getVisitorDto()));
+
+        ResponseEntity response = visitorController.getAllVisitors(1,2);
+        Truth.assertThat(response.getStatusCode().value())
+                .isEqualTo(200);
+    }
+
+    @Test
+    public void testCreateVisitorAndReturnsInternalServerError() {
+        when(visitorService.createVisitor(any())).thenReturn(null);
+
+        ResponseEntity response = visitorController
+                .saveOrUpdateVisitor(VisitorDataProvider.getVisitorDto());
+
+        Truth.assertThat(response.getStatusCode().value()).isEqualTo(500);
+    }
+
+    @Test
+    public void testCreateVisitor() {
+        UUID uuid = UUID.randomUUID();
+        when(visitorService.createVisitor(any()))
+                .thenReturn(VisitorDataProvider.getVisitorWithId(uuid));
+
+        ResponseEntity<VisitorDto> response = visitorController
+                .saveOrUpdateVisitor(VisitorDataProvider.getVisitorDto());
+
+        Truth.assertThat(response.getStatusCode().value()).isEqualTo(200);
+        Truth.assertThat(response.getBody().getVisitorId()).isEqualTo(uuid);
+    }
+
+
+}

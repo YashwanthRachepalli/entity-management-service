@@ -1,10 +1,12 @@
 plugins {
 	id 'java'
+	id 'jacoco'
 	id 'io.spring.dependency-management' version "1.1.0"
 	id 'org.springframework.boot' version '3.0.1'
 	id 'pl.allegro.tech.build.axion-release' version '1.14.3'
 	id 'com.palantir.docker' version '0.34.0'
 	id 'com.palantir.docker-run' version '0.34.0'
+	id 'de.jansauer.printcoverage' version '2.0.0'
 }
 
 version = scmVersion.version
@@ -18,17 +20,27 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.kafka:spring-kafka:3.0.1'
 	implementation 'org.springframework.boot:spring-boot-devtools'
 	implementation group: 'com.h2database', name: 'h2', version: '2.1.214'
-
+	implementation 'io.micrometer:micrometer-registry-prometheus:1.11.2'
+	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0'
+	implementation 'org.modelmapper:modelmapper:3.0.0'
 	compileOnly 'org.projectlombok:lombok:1.18.24'
 	annotationProcessor 'org.projectlombok:lombok:1.18.24'
 
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'org.springframework.kafka:spring-kafka-test:3.0.1'
+	testImplementation 'com.google.truth:truth:1.1.4'
 }
 
 test {
 	useJUnitPlatform()
+	jacoco {
+		destinationFile = file("$buildDir/jacoco/jacocoTest.exec")
+		classDumpDir = file("$buildDir/jacoco/classpathdumps")
+	}
+	finalizedBy jacocoTestReport, jacocoTestCoverageVerification, printCoverage
 }
 
 String dockerHubUsernameProperty = findProperty('dockerHubUsername') ?: 'yashwanth01'
@@ -57,5 +69,51 @@ task('doStuff', type: Copy) {
 	println 'congiguring task'
 	doFirst {
 		println 'running task'
+	}
+}
+
+jacoco {
+	toolVersion = "0.8.9"
+}
+
+jacocoTestReport {
+	reports {
+		xml.enabled true
+		csv.enabled false
+		html.destination file("${buildDir}/reports/jacocoHtml")
+	}
+
+	afterEvaluate {
+		classDirectories.setFrom(files(classDirectories.files.collect {
+			fileTree(dir: it, exclude: [
+					'**/model/**',
+					'**/entity/**',
+					'**/repository/**',
+					'**/config/**',
+					'**/streams/event/**'
+			])
+		}))
+	}
+
+}
+
+jacocoTestCoverageVerification {
+	afterEvaluate {
+		classDirectories.setFrom(files(classDirectories.files.collect {
+			fileTree(dir: it, exclude: [
+					'**/model/**',
+					'**/*Config*.*.',
+					'**/*Config$*.*.',
+					'**/streams/event/**'
+			])
+		}))
+	}
+	violationRules {
+		rule {
+			limit {
+				counter = 'LINE'
+				minimum = 0.7
+			}
+		}
 	}
 }
