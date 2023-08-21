@@ -44,7 +44,7 @@ test {
 }
 
 String dockerHubUsernameProperty = findProperty('dockerHubUsername') ?: 'yashwanth01'
-String imageName = "${dockerHubUsernameProperty}/entity-management-service:$version"
+String imageName = "${dockerHubUsernameProperty}/ami:$version"
 
 docker {
 	name imageName
@@ -61,7 +61,7 @@ dockerRun {
 
 java {
 	toolchain {
-		languageVersion = JavaLanguageVersion.of(19)
+		languageVersion = JavaLanguageVersion.of(17)
 	}
 }
 

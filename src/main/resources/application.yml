@@ -36,7 +36,7 @@ kafka:
   bootstrap-servers: localhost:9092
   topic: VISIT_EVENT_TOPIC_DEV
   group-id: AMS_GROUP_1
-  enabled: true
+  enabled: false
   max-replay-count: 2
 
 

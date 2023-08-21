@@ -6,6 +6,7 @@ import com.ams.streams.model.RequestStatus;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ObjectUtils;
@@ -15,6 +16,7 @@ import java.util.Optional;
 
 @Component
 @Slf4j
+@ConditionalOnExpression("${kafka.enabled}")
 public class ReplayEventProducer {
 
     @Autowired
