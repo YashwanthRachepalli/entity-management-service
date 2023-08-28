@@ -28,6 +28,7 @@ public class VisitorDataProvider {
     }
 
     public static Visitor getVisitor(UUID id) {
+
         return modelMapper.map(getVisitorWithId(id), Visitor.class);
     }
 
