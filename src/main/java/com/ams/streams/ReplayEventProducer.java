@@ -8,11 +8,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.kafka.support.SendResult;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ObjectUtils;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 
 @Component
 @Slf4j
@@ -31,7 +33,14 @@ public class ReplayEventProducer {
             if (ObjectUtils.isEmpty(visitEvent.getReplayAttributes())
                     || (visitEvent.getReplayAttributes().getReplayCount() < maxReplayCount)) {
                 VisitEvent replayEvent = constructReplayMessage(visitEvent);
-                kafkaTemplate.send(topic, visitEvent.getRequestId(), replayEvent);
+                CompletableFuture<SendResult<String, VisitEvent>> completableFuture =
+                        kafkaTemplate.send(topic, visitEvent.getRequestId(), replayEvent);
+//                completableFuture.whenCompleteAsync((sr, ex) -> {
+//                   log.info("Sent (key={}, partition={}): {}",
+//                           sr.getProducerRecord().key(),
+//                           sr.getProducerRecord().key(),
+//                           sr.getProducerRecord().value());
+//                });
             } else {
                 Optional<VisitEvent> cancelEvent = constructCancellationEvent(visitEvent);
                 if(cancelEvent.isPresent()) {

@@ -57,18 +57,6 @@ create table LEASE (
     foreign key (tenant_id) references TENANT (tenant_id)
 );
 
-create table EMPLOYEE (
-    employee_id uuid not null,
-    first_name varchar(255) not null,
-    last_name varchar(255),
-    password varchar(255) not null,
-    email varchar(255) not null,
-    mobile_number varchar(255) not null,
-    manager_id uuid,
-    primary key (employee_id),
-    foreign key (manager_id) references EMPLOYEE (employee_id)
-);
-
 create table VISITOR
 (
     visitor_id uuid not null,

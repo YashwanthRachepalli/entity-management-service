@@ -17,7 +17,7 @@ import java.util.List;
 
 @Slf4j
 @RestController
-@RequestMapping("/visitors")
+@RequestMapping("/api/visitors")
 @Tag(name = "visitor", description = "api to manage visitors")
 public class VisitorController {
 

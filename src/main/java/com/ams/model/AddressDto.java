@@ -1,6 +1,6 @@
 package com.ams.model;
 
-import com.ams.util.ValidationConstants;
+import com.ams.constants.ValidationConstants;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;

@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/lease")
+@RequestMapping("/api/lease")
 @Slf4j
 @Tag(name = "lease", description = "api to lease apartments in a building")
 public class LeaseController {

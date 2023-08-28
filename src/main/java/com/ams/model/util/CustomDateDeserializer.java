@@ -1,4 +1,4 @@
-package com.ams.util;
+package com.ams.model.util;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;

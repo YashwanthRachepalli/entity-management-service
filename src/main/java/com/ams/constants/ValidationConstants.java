@@ -1,4 +1,4 @@
-package com.ams.util;
+package com.ams.constants;
 
 public class ValidationConstants {
 

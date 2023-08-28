@@ -26,3 +26,13 @@ kafka:
   group-id: AMS_GROUP_1
   enabled: false
   max-replay-count: 2
+
+ams:
+  security:
+    enabled: false
+
+jwt:
+  auth:
+    converter:
+      resource-id: external-client
+      principal-attribute: preferred_username

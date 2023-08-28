@@ -20,6 +20,9 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+	implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
 	implementation 'org.springframework.kafka:spring-kafka:3.0.1'
 	implementation 'org.springframework.boot:spring-boot-devtools'
 	implementation group: 'com.h2database', name: 'h2', version: '2.1.214'
@@ -90,7 +93,8 @@ jacocoTestReport {
 					'**/entity/**',
 					'**/repository/**',
 					'**/config/**',
-					'**/streams/event/**'
+					'**/streams/event/**',
+					'**/constants/**'
 			])
 		}))
 	}
@@ -104,7 +108,8 @@ jacocoTestCoverageVerification {
 					'**/model/**',
 					'**/*Config*.*.',
 					'**/*Config$*.*.',
-					'**/streams/event/**'
+					'**/streams/event/**',
+					'**/constants/**'
 			])
 		}))
 	}

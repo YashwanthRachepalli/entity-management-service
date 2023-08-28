@@ -20,7 +20,7 @@ import java.util.Optional;
 
 @RestController
 @Slf4j
-@RequestMapping("/tenant")
+@RequestMapping("/api/tenant")
 @Tag(name = "tenant", description = "api to manage tenants")
 public class TenantController {
 
