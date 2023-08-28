@@ -34,7 +34,7 @@ import java.util.UUID;
         ManagementWebSecurityAutoConfiguration.class,
         OAuth2ClientAutoConfiguration.class
 })
-@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 @AutoConfigureMockMvc(addFilters = false)
 @ActiveProfiles("test")
 public class LeaseControllerIntegrationTest {
