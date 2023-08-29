@@ -1,7 +1,9 @@
 package com.ams.controller;
 
+import com.ams.model.VisitRequestStatus;
 import com.ams.model.VisitorDto;
 import com.ams.service.VisitorService;
+import com.nimbusds.oauth2.sdk.util.CollectionUtils;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -13,7 +15,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 @Slf4j
 @RestController
@@ -60,6 +65,29 @@ public class VisitorController {
             return ResponseEntity.internalServerError().build();
         }
         return ResponseEntity.ok(response);
+    }
+
+    @Operation(
+            summary = "get all visit requests",
+            description = "get all visit requests"
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successful operation"),
+            @ApiResponse(responseCode = "400", description = "Invalid input")
+    })
+    @GetMapping(path = "/visit-requests")
+    public ResponseEntity getAllVisitRequests() {
+        log.info("Fetching visit requests from data store");
+        List<VisitRequestStatus> visitRequestStatuses = new ArrayList<>();
+        try {
+            visitRequestStatuses = visitorService.getAllVisitRequests().get();
+        } catch (Exception e) {
+            log.error("Exception in fetching visit requests: {}", e.getMessage());
+        }
+        if (CollectionUtils.isEmpty(visitRequestStatuses)) {
+            return ResponseEntity.internalServerError().build();
+        }
+        return ResponseEntity.ok(visitRequestStatuses);
     }
 
 }

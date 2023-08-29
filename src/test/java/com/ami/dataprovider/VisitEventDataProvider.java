@@ -1,10 +1,12 @@
 package com.ami.dataprovider;
 
+import com.ams.model.VisitRequestStatus;
 import com.ams.streams.event.ReplayAttributes;
 import com.ams.streams.event.VisitEvent;
 import com.ams.streams.model.RequestStatus;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 public class VisitEventDataProvider {
@@ -42,5 +44,12 @@ public class VisitEventDataProvider {
                         .latestPublishedTimeStamp(LocalDateTime.now())
                         .build())
                 .build();
+    }
+
+    public static List<VisitRequestStatus> getVisitRequestStatuses() {
+        return List.of(VisitRequestStatus.builder()
+                .requestId(UUID.randomUUID().toString())
+                .requestStatus(RequestStatus.PENDING.name())
+                .build());
     }
 }

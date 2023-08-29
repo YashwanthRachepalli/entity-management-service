@@ -51,13 +51,15 @@ spring:
 
 kafka:
   bootstrap-servers: localhost:9092
-  topic: VISIT_EVENT_TOPIC_DEV
+  topic: VISIT_EVENT_TOPIC_TEST
   group-id: AMS_GROUP_1
-  enabled: false
+  enabled: true
   max-replay-count: 2
 
 ams:
   security:
+    enabled: true
+  async-config:
     enabled: true
 
 jwt:
@@ -66,10 +68,8 @@ jwt:
       resource-id: external-client
       principal-attribute: preferred_username
 
-#      use-pkce-with-authorization-code-grant: true
-#  oAuthFlow:
-#    authorizationUrl: http://localhost:7075/realms/external/protocol/openid-connect/auth
-#    tokenUrl: http://localhost:7075/realms/external/protocol/openid-connect/token
+url:
+  visitor-management-service: http://localhost:9002
 
 logging:
   level:

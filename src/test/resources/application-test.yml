@@ -30,9 +30,14 @@ kafka:
 ams:
   security:
     enabled: false
+  async-config:
+    enabled: false
 
 jwt:
   auth:
     converter:
       resource-id: external-client
       principal-attribute: preferred_username
+
+url:
+  visitor-management-service: http://localhost:9002
