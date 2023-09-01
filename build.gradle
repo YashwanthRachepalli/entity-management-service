@@ -1,6 +1,7 @@
 plugins {
 	id 'java'
 	id 'jacoco'
+	id "org.sonarqube" version "4.3.0.3225"
 	id 'io.spring.dependency-management' version "1.1.0"
 	id 'org.springframework.boot' version '3.0.1'
 	id 'pl.allegro.tech.build.axion-release' version '1.14.3'
@@ -72,6 +73,14 @@ task('doStuff', type: Copy) {
 	println 'congiguring task'
 	doFirst {
 		println 'running task'
+	}
+}
+
+sonar {
+	properties {
+		property "sonar.host.url", property('sonar.host.url')
+		property "sonar.projectKey", property('sonar.project.key')
+		property "sonar.token", property('sonar.token')
 	}
 }
 

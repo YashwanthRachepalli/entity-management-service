@@ -53,14 +53,14 @@ kafka:
   bootstrap-servers: localhost:9092
   topic: VISIT_EVENT_TOPIC_TEST
   group-id: AMS_GROUP_1
-  enabled: true
+  enabled: false
   max-replay-count: 2
 
 ams:
   security:
     enabled: true
   async-config:
-    enabled: true
+    enabled: false
 
 jwt:
   auth:
