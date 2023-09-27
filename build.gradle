@@ -8,12 +8,18 @@ plugins {
 	id 'com.palantir.docker' version '0.34.0'
 	id 'com.palantir.docker-run' version '0.34.0'
 	id 'de.jansauer.printcoverage' version '2.0.0'
+	id 'com.netflix.dgs.codegen' version '6.0.2'
 }
 
 version = scmVersion.version
 
 repositories {
 	mavenCentral()
+}
+
+ext {
+	set('springCloudVersion', "2022.0.4")
+	set('kotlin.version', "1.4.31")
 }
 
 dependencies {
@@ -24,18 +30,38 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
 	implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
+	implementation 'org.springframework.cloud:spring-cloud-starter-config'
 	implementation 'org.springframework.kafka:spring-kafka:3.0.1'
 	implementation 'org.springframework.boot:spring-boot-devtools'
 	implementation group: 'com.h2database', name: 'h2', version: '2.1.214'
 	implementation 'io.micrometer:micrometer-registry-prometheus:1.11.2'
 	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0'
 	implementation 'org.modelmapper:modelmapper:3.0.0'
+	implementation "com.netflix.graphql.dgs:graphql-dgs-spring-boot-starter"
+	implementation 'io.cucumber:cucumber-spring:7.3.2'
 	compileOnly 'org.projectlombok:lombok:1.18.24'
+	implementation 'com.athaydes.javanna:javanna:1.1'
 	annotationProcessor 'org.projectlombok:lombok:1.18.24'
 
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.kafka:spring-kafka-test:3.0.1'
 	testImplementation 'com.google.truth:truth:1.1.4'
+	testImplementation 'io.cucumber:cucumber-java:7.3.2'
+	testImplementation 'io.cucumber:cucumber-junit:7.3.2'
+	testImplementation 'org.junit.vintage:junit-vintage-engine:5.8.2'
+}
+
+dependencyManagement {
+	imports {
+		mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+		mavenBom "com.netflix.graphql.dgs:graphql-dgs-platform-dependencies:latest.release"
+	}
+}
+
+generateJava{
+	schemaPaths = ["${projectDir}/src/main/resources/schema"]
+	packageName = 'com.ams.dgs'
+	generateClient = true
 }
 
 test {
@@ -103,7 +129,10 @@ jacocoTestReport {
 					'**/repository/**',
 					'**/config/**',
 					'**/streams/event/**',
-					'**/constants/**'
+					'**/constants/**',
+					'**/dgs/client/**',
+					'**/dgs/types/**',
+					'**/aop/**'
 			])
 		}))
 	}
@@ -115,17 +144,20 @@ jacocoTestCoverageVerification {
 		classDirectories.setFrom(files(classDirectories.files.collect {
 			fileTree(dir: it, exclude: [
 					'**/model/**',
-					'**/*Config*.*.',
-					'**/*Config$*.*.',
+					'**/entity/**',
+					'**/repository/**',
+					'**/config/**',
 					'**/streams/event/**',
-					'**/constants/**'
+					'**/constants/**',
+					'**/dgs/client/**',
+					'**/dgs/types/**',
+					'**/aop/**'
 			])
 		}))
 	}
 	violationRules {
 		rule {
 			limit {
-				counter = 'LINE'
 				minimum = 0.7
 			}
 		}

@@ -34,6 +34,8 @@ public class TenantDto {
     private String email;
     @NotEmpty
     private String mobileNumber;
+    @NotEmpty
+    private String preferredContact;
     @Valid
     private AddressDto address;
 

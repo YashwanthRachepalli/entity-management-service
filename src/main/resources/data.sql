@@ -1,8 +1,8 @@
 INSERT INTO ADDRESS (address_id, address_line_1, address_line_2, pin_code)
 VALUES ('6a17ce18-94dd-40ac-bb11-2e838bc50b7e', 'Lane 1', 'Landmark', '999999');
 
-INSERT INTO TENANT (tenant_id, first_name, last_name, password, address_id, govt_issued_identifier, email, mobile_number )
-VALUES ('5cadcc39-d58a-40f9-af81-244eee152254', 'Andy', 'Fletcher', 'xxxx', '6a17ce18-94dd-40ac-bb11-2e838bc50b7e', 'xxxx', 'xxx@gmail.com', 'xxxxxxxx');
+INSERT INTO TENANT (tenant_id, first_name, last_name, password, address_id, govt_issued_identifier, email, mobile_number, preferred_contact)
+VALUES ('5cadcc39-d58a-40f9-af81-244eee152254', 'Andy', 'Fletcher', 'xxxx', '6a17ce18-94dd-40ac-bb11-2e838bc50b7e', 'xxxx', 'xxx@gmail.com', 'xxxxxxxx', 'SMS');
 
 INSERT INTO BUILDING (building_id, building_name, address_line, pin_code)
 VALUES ('8cd6b720-6ef5-4bbb-b76b-a8912573eca5', 'xxx xxx xxx', 'Line 1 near landmark', 'xxxxxx');

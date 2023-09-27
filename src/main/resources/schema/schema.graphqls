@@ -1,0 +1,9 @@
+type Query {
+    getVisitorById(id: String): Visitor
+}
+
+type Visitor {
+    firstName: String
+    lastName: String
+    mobileNumber: String
+}

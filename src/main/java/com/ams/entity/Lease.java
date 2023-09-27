@@ -11,7 +11,6 @@ import org.hibernate.annotations.JdbcTypeCode;
 import java.io.Serializable;
 import java.sql.Types;
 import java.time.LocalDate;
-import java.util.Set;
 import java.util.UUID;
 
 @Data

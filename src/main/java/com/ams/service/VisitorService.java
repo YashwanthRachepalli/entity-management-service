@@ -15,8 +15,4 @@ public interface VisitorService {
 
     VisitorDto createVisitor(VisitorDto visitorDto);
 
-    Optional<Visitor> getVisitorById(UUID id);
-
-    CompletableFuture<List<VisitRequestStatus>> getAllVisitRequests() throws Exception;
-
 }

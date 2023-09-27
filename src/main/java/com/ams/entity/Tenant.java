@@ -47,6 +47,9 @@ public class Tenant implements Serializable {
     @Column(name = "mobile_number", nullable = false)
     private String mobileNumber;
 
+    @Column(name = "preferred_contact", nullable = false)
+    private String preferredContact;
+
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "addressId", nullable = false)
     private Address address;

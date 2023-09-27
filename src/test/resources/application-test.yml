@@ -1,4 +1,7 @@
 spring:
+  cloud:
+    config:
+      enabled: false
   h2:
     console:
       enabled: true
@@ -30,7 +33,7 @@ kafka:
 ams:
   security:
     enabled: false
-  async-config:
+  monitoring:
     enabled: false
 
 jwt:
@@ -38,6 +41,3 @@ jwt:
     converter:
       resource-id: external-client
       principal-attribute: preferred_username
-
-url:
-  visitor-management-service: http://localhost:9002

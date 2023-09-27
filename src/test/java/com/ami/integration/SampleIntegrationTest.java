@@ -1,12 +1,23 @@
 package com.ami.integration;
 
 import com.ami.dataprovider.LeaseDataProvider;
+import com.ami.dataprovider.TenantDataProvider;
+import com.ami.dataprovider.VisitorDataProvider;
 import com.ams.EntityManagementServiceApplication;
 import com.ams.config.SpringConfig;
+import com.ams.dgs.client.GetVisitorByIdGraphQLQuery;
+import com.ams.dgs.client.GetVisitorByIdProjectionRoot;
 import com.ams.model.LeaseDto;
 import com.ams.model.LeaseRequest;
+import com.ams.model.TenantDto;
+import com.ams.model.VisitorDto;
 import com.ams.service.LeaseService;
+import com.ams.service.VisitorService;
 import com.google.common.truth.Truth;
+import com.netflix.graphql.dgs.DgsQueryExecutor;
+import com.netflix.graphql.dgs.client.codegen.GraphQLQueryRequest;
+import graphql.ExecutionResult;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.actuate.autoconfigure.security.servlet.ManagementWebSecurityAutoConfiguration;
@@ -37,12 +48,18 @@ import java.util.UUID;
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 @AutoConfigureMockMvc(addFilters = false)
 @ActiveProfiles("test")
-public class LeaseControllerIntegrationTest {
+public class SampleIntegrationTest {
     @Autowired
     private TestRestTemplate testRestTemplate;
 
     @Autowired
     private LeaseService leaseService;
+
+    @Autowired
+    private DgsQueryExecutor dgsQueryExecutor;
+
+    @Autowired
+    private VisitorService visitorService;
 
     @Test
     public void test() {
@@ -62,5 +79,38 @@ public class LeaseControllerIntegrationTest {
         );
 
         Truth.assertThat(response.getStatusCode().value()).isEqualTo(400);
+    }
+
+    @Test
+    public void testTenantController() {
+        UUID tenantId = UUID.randomUUID();
+
+        TenantDto tenantDto = TenantDataProvider.getTenantDto();
+        tenantDto.setPassword("test");
+        HttpHeaders httpHeaders = new HttpHeaders();
+        ResponseEntity<TenantDto> response = testRestTemplate.exchange(
+                "/api/tenant",
+                HttpMethod.POST,
+                new HttpEntity<>(tenantDto, httpHeaders),
+                TenantDto.class
+        );
+
+        Truth.assertThat(response.getStatusCode().value()).isEqualTo(400);
+    }
+
+    @Test
+    public void testGetVisitorById() {
+        VisitorDto visitor = visitorService.createVisitor(VisitorDataProvider.getVisitorDto());
+        Truth.assertThat(visitor.getFirstName()).isEqualTo("test_first_name");
+
+        GraphQLQueryRequest graphQLQueryRequest = new GraphQLQueryRequest(
+                GetVisitorByIdGraphQLQuery.newRequest().id(visitor.getVisitorId().toString()).build(),
+                new GetVisitorByIdProjectionRoot().firstName()
+        );
+
+        String firstName =
+                dgsQueryExecutor.executeAndExtractJsonPath(graphQLQueryRequest.serialize(),
+                        "data.getVisitorById.firstName");
+        Truth.assertThat(firstName).isEqualTo("test_first_name");
     }
 }

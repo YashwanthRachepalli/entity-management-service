@@ -17,6 +17,8 @@ create table TENANT
     govt_issued_identifier varchar(255) not null,
     email varchar(255) not null,
     mobile_number varchar(255) not null,
+    preferred_contact varchar(255) not null,
+    check(preferred_contact in ('SMS', 'EMAIL')),
     primary key (tenant_id),
     foreign key (address_id) references ADDRESS (address_id)
 );

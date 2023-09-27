@@ -67,25 +67,25 @@ public class VisitorControllerTest {
         Truth.assertThat(response.getBody().getVisitorId()).isEqualTo(uuid);
     }
 
-    @Test
-    public void testGetAllVisitRequests() throws Exception {
-        when(visitorService.getAllVisitRequests())
-                .thenReturn(CompletableFuture.supplyAsync(() ->
-                        VisitEventDataProvider.getVisitRequestStatuses()));
-
-        ResponseEntity<List<VisitRequestStatus>> response =
-                visitorController.getAllVisitRequests();
-
-        Truth.assertThat(response.getBody().size()).isEqualTo(1);
-
-        when(visitorService.getAllVisitRequests())
-                .thenThrow(Exception.class);
-
-        ResponseEntity<List<VisitRequestStatus>> response1 =
-                visitorController.getAllVisitRequests();
-
-        Truth.assertThat(response1.getStatusCode().value()).isEqualTo(500);
-    }
+//    @Test
+//    public void testGetAllVisitRequests() throws Exception {
+//        when(visitorService.getAllVisitRequests())
+//                .thenReturn(CompletableFuture.supplyAsync(() ->
+//                        VisitEventDataProvider.getVisitRequestStatuses()));
+//
+//        ResponseEntity<List<VisitRequestStatus>> response =
+//                visitorController.getAllVisitRequests();
+//
+//        Truth.assertThat(response.getBody().size()).isEqualTo(1);
+//
+//        when(visitorService.getAllVisitRequests())
+//                .thenThrow(Exception.class);
+//
+//        ResponseEntity<List<VisitRequestStatus>> response1 =
+//                visitorController.getAllVisitRequests();
+//
+//        Truth.assertThat(response1.getStatusCode().value()).isEqualTo(500);
+//    }
 
 
 }

@@ -7,6 +7,8 @@ import static org.mockito.Mockito.doThrow;
 import com.ami.dataprovider.ApartmentDataProvider;
 import com.ami.dataprovider.LeaseDataProvider;
 import com.ami.dataprovider.TenantDataProvider;
+import com.ams.entity.Lease;
+import com.ams.entity.Tenant;
 import com.ams.model.LeaseDto;
 import com.ams.model.LeaseRequest;
 import com.ams.repository.LeaseRepository;
@@ -23,8 +25,10 @@ import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
 
+import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @ExtendWith(MockitoExtension.class)
@@ -118,6 +122,42 @@ public class LeaseServiceTest {
                 .build();
 
         Assertions.assertThrows(Exception.class, () -> leaseService.saveOrUpdate(leaseRequest));
+    }
+
+    @Test
+    public void testGetActiveTenantNegativeScenarios() {
+        when(leaseRepository.findALLLeasesByApartmentId(any()))
+                .thenReturn(Collections.emptyList());
+
+        Assertions.assertThrows(Exception.class,
+                () -> leaseService.getActiveTenantId(UUID.randomUUID(), LocalDate.now()));
+    }
+
+    @Test
+    public void testGetActiveTenantWithActiveLease() throws Exception {
+        UUID tenantId = UUID.randomUUID();
+        Lease lease = LeaseDataProvider.getLease(UUID.randomUUID());
+        Tenant tenant = TenantDataProvider.getTenant(tenantId);
+        lease.setTenant(tenant);
+        when(leaseRepository.findALLLeasesByApartmentId(any()))
+                .thenReturn(List.of(lease));
+
+        Optional<Tenant> result = leaseService.getActiveTenantId(UUID.randomUUID(), LocalDate.now());
+
+        Truth.assertThat(result).isEqualTo(Optional.of(tenant));
+    }
+
+    @Test
+    public void testGetActiveTenantWithNoActiveLease() throws Exception {
+        UUID tenantId = UUID.randomUUID();
+        Lease lease = LeaseDataProvider.getLease(UUID.randomUUID());
+        lease.setEndDate(LocalDate.now());
+        Tenant tenant = TenantDataProvider.getTenant(tenantId);
+        lease.setTenant(tenant);
+        when(leaseRepository.findALLLeasesByApartmentId(any()))
+                .thenReturn(List.of(lease));
+
+        Assertions.assertThrows(Exception.class, () -> leaseService.getActiveTenantId(UUID.randomUUID(), LocalDate.now()));
     }
 
 }

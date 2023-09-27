@@ -3,7 +3,6 @@ package com.ami.service;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.any;
 
-import com.ami.dataprovider.VisitEventDataProvider;
 import com.ami.dataprovider.VisitorDataProvider;
 import com.ams.model.VisitorDto;
 import com.ams.repository.VisitorRepository;
@@ -18,7 +17,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
@@ -79,11 +77,11 @@ public class VisitorServiceTest {
 
     }
 
-    @Test
-    public void testGetAllVisitRequests() throws Exception{
-        ReflectionTestUtils.setField(visitorService, "visitorServiceUrl", "dummy-url");
-        when(restTemplate.getForObject("dummy-url/request", List.class))
-                .thenReturn(VisitEventDataProvider.getVisitRequestStatuses());
-        visitorService.getAllVisitRequests().get();
-    }
+//    @Test
+//    public void testGetAllVisitRequests() throws Exception{
+//        ReflectionTestUtils.setField(visitorService, "visitorServiceUrl", "dummy-url");
+//        when(restTemplate.getForObject("dummy-url/request", List.class))
+//                .thenReturn(VisitEventDataProvider.getVisitRequestStatuses());
+//        visitorService.getAllVisitRequests().get();
+//    }
 }

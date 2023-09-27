@@ -67,27 +67,4 @@ public class VisitorController {
         return ResponseEntity.ok(response);
     }
 
-    @Operation(
-            summary = "get all visit requests",
-            description = "get all visit requests"
-    )
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Successful operation"),
-            @ApiResponse(responseCode = "400", description = "Invalid input")
-    })
-    @GetMapping(path = "/visit-requests")
-    public ResponseEntity getAllVisitRequests() {
-        log.info("Fetching visit requests from data store");
-        List<VisitRequestStatus> visitRequestStatuses = new ArrayList<>();
-        try {
-            visitRequestStatuses = visitorService.getAllVisitRequests().get();
-        } catch (Exception e) {
-            log.error("Exception in fetching visit requests: {}", e.getMessage());
-        }
-        if (CollectionUtils.isEmpty(visitRequestStatuses)) {
-            return ResponseEntity.internalServerError().build();
-        }
-        return ResponseEntity.ok(visitRequestStatuses);
-    }
-
 }

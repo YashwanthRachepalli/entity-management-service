@@ -11,6 +11,9 @@ management:
         enabled: true
 
 spring:
+  cloud:
+    config:
+      enabled: false
   h2:
     console:
       enabled: true
@@ -53,23 +56,20 @@ kafka:
   bootstrap-servers: localhost:9092
   topic: VISIT_EVENT_TOPIC_TEST
   group-id: AMS_GROUP_1
-  enabled: false
+  enabled: true
   max-replay-count: 2
 
 ams:
   security:
     enabled: true
-  async-config:
-    enabled: false
+  monitoring:
+    enabled: true
 
 jwt:
   auth:
     converter:
       resource-id: external-client
       principal-attribute: preferred_username
-
-url:
-  visitor-management-service: http://localhost:9002
 
 logging:
   level:

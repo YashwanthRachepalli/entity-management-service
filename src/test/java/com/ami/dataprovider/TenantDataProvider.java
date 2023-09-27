@@ -17,6 +17,7 @@ public class TenantDataProvider {
                 .lastName("testLastName")
                 .email("test@gmail.com")
                 .mobileNumber("9786543210")
+                .preferredContact("SMS")
                 .govtIssuedIdentifier("testIdentifier")
                 .address(getAddressDto())
                 .build();
@@ -37,6 +38,7 @@ public class TenantDataProvider {
                 .lastName("testLastName")
                 .email("test@gmail.com")
                 .mobileNumber("9786543210")
+                .preferredContact("SMS")
                 .govtIssuedIdentifier("testIdentifier")
                 .address(getAddressDto())
                 .build();

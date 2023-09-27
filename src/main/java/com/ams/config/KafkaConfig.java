@@ -1,8 +1,10 @@
 package com.ams.config;
 
 import com.ams.streams.event.VisitEvent;
+import org.apache.kafka.clients.admin.NewTopic;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.producer.ProducerConfig;
+import org.apache.kafka.common.config.TopicConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +14,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
+import org.springframework.kafka.config.TopicBuilder;
 import org.springframework.kafka.core.*;
 import org.springframework.kafka.support.serializer.JsonDeserializer;
 import org.springframework.kafka.support.serializer.JsonSerializer;
@@ -62,6 +65,15 @@ public class KafkaConfig {
     @Bean
     public KafkaTemplate<String, VisitEvent> kafkaTemplate(final ProducerFactory<String, VisitEvent> producerFactory) {
         return new KafkaTemplate<>(producerFactory);
+    }
+
+    @Bean
+    public NewTopic visitEventTopic(@Value("${kafka.topic}") final String topic) {
+        return TopicBuilder.name(topic)
+                .partitions(1)
+                .replicas(1)
+                .config(TopicConfig.COMPRESSION_TYPE_CONFIG, "zstd")
+                .build();
     }
 
 }

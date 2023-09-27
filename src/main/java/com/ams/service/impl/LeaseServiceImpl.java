@@ -14,10 +14,11 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 import java.time.LocalDate;
 import java.util.Collection;
-import java.util.Set;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -65,4 +66,18 @@ public class LeaseServiceImpl implements LeaseService {
         return leases.stream().anyMatch(lease -> lease.getEndDate().isAfter(date));
     }
 
+    @Override
+    public Optional<Tenant> getActiveTenantId(UUID apartmentId, LocalDate date) throws Exception {
+        Collection<Lease> leases = leaseRepository.findALLLeasesByApartmentId(apartmentId);
+        if (CollectionUtils.isEmpty(leases)) {
+           throw new Exception("No lease found for this apartment");
+        }
+        Optional<Lease> activeLease = leases.stream()
+                .filter(lease -> lease.getEndDate().isAfter(date))
+                .findFirst();
+        if (activeLease.isEmpty()) {
+            throw new Exception("No Active Lease found for apartment!");
+        }
+        return Optional.of(activeLease.get().getTenant());
+    }
 }
